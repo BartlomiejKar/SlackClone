@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import firebase from "../../Firebase"
 import { Link } from 'react-router-dom';
 import { Form, Segment, Grid, Button, Header, Message, Icon, GridColumn } from "semantic-ui-react"
-import { isFormEmpty, isPasswordValid } from "./ValidationMethod"
+import { isFormEmpty, isPasswordValid, saveProfile } from "./ValidationMethod"
 
 
 const InitialForm = {
     userName: "",
-    userSurname: "",
     email: "",
     password: "",
     passwordConfirm: ""
@@ -17,6 +16,8 @@ const Register = () => {
 
     const [dataUser, setDataUser] = useState(InitialForm);
     const [errors, setErrors] = useState(false);
+    const [loading, setLoading] = useState(null);
+    const [signIn, setSignIn] = useState(false)
 
 
     const handleChange = (e) => {
@@ -42,15 +43,25 @@ const Register = () => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault()
         if (isFormValid()) {
-            e.preventDefault()
+            setLoading(true)
             firebase.auth()
                 .createUserWithEmailAndPassword(dataUser.email, dataUser.password)
                 .then(createdUser => {
+                    createdUser.user.updateProfile({
+                        displayName: dataUser.userName
+                    })
                     console.log(createdUser)
+                    setSignIn("User Register, please Log in");
+                    setDataUser(InitialForm)
+                    setLoading(false)
+                    saveProfile(createdUser)
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err);
+                    setErrors(err.message)
+                    setLoading(false)
                 })
         } else {
             return false
@@ -75,16 +86,6 @@ const Register = () => {
                             onChange={handleChange}
                             type="text"
                             value={dataUser.userName}
-                        />
-                        <Form.Input
-                            fluid
-                            name="userSurname"
-                            icon="user"
-                            iconPosition="left"
-                            placeholder="UserSurname"
-                            onChange={handleChange}
-                            type="text"
-                            value={dataUser.userSurname}
                         />
                         <Form.Input
                             fluid
@@ -116,13 +117,13 @@ const Register = () => {
                             type="password"
                             value={dataUser.passwordConfirm}
                         />
-                        <Button color="blue" size="large" type="submit" fluid>Submit</Button>
+                        <Button className={loading ? "loading" : ""} color="blue" size="large" type="submit" fluid>Submit</Button>
                     </Segment>
                     {errors ? <Message negative>
                         <h3>Error</h3>
                         {errors}
                     </Message> : null}
-
+                    {signIn ? <Message positive>{signIn}</Message> : null}
                 </Form>
                 <Message>Already a user? <Link to="/login">Log in</Link></Message>
             </GridColumn>

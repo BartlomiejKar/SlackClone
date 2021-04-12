@@ -13,7 +13,7 @@ const InitialForm = {
 }
 
 const Register = () => {
-
+    const usersRef = firebase.database().ref('users');
     const [dataUser, setDataUser] = useState(InitialForm);
     const [errors, setErrors] = useState(false);
     const [loading, setLoading] = useState(null);
@@ -51,12 +51,12 @@ const Register = () => {
                 .then(createdUser => {
                     createdUser.user.updateProfile({
                         displayName: dataUser.userName
+                    }).then(() => {
+                        saveProfile(createdUser, usersRef)
                     })
-                    console.log(createdUser)
                     setSignIn("User Register, please Log in");
                     setDataUser(InitialForm)
                     setLoading(false)
-                    saveProfile(createdUser)
                 })
                 .catch(err => {
                     console.log(err);

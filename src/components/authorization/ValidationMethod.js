@@ -1,4 +1,3 @@
-import firebase from "firebase"
 
 export const isFormEmpty = ({
     userName,
@@ -22,8 +21,7 @@ export const isPasswordValid = ({ password, passwordConfirm }) => {
 
 }
 
-export const saveProfile = (createdUser) => {
-    const usersRef = firebase.database().ref("users")
+export const saveProfile = (createdUser, usersRef) => {
     return usersRef.child(createdUser.user.uid).set({
         name: createdUser.user.displayName,
         avatar: createdUser.user.photoURL

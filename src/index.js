@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { setUser } from "./actions/index"
+import { setUser, clearUser } from "./actions/index"
 import ReactDOM from 'react-dom';
 import firebase from "firebase/app"
 import { BrowserRouter, Switch, Route, withRouter, useHistory } from "react-router-dom";
@@ -12,16 +12,18 @@ import Login from "./components/authorization/Login";
 import Register from "./components/authorization/Register";
 
 
-const Root = ({ isLoading, setUser }) => {
+const Root = ({ isLoading, setUser, clearUser }) => {
   const history = useHistory()
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log(user)
         setUser(user)
         history.push({
           pathname: "/"
         })
+      } else {
+        history.push("/login")
+        clearUser()
       }
     })
   }, [history, setUser])
@@ -42,7 +44,7 @@ const mapStateFromProps = (state) => ({
 })
 
 
-const RootWithRouter = withRouter(connect(mapStateFromProps, { setUser })(Root))
+const RootWithRouter = withRouter(connect(mapStateFromProps, { setUser, clearUser })(Root))
 
 ReactDOM.render(
   <Provider store={store}>

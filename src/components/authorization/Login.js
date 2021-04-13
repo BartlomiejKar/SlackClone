@@ -15,8 +15,6 @@ const Login = () => {
     const [dataUser, setDataUser] = useState(InitialForm);
     const [errors, setErrors] = useState(false);
     const [loading, setLoading] = useState(null);
-    const [signIn, setSignIn] = useState(false)
-
 
     const handleChange = (e) => {
         setDataUser({

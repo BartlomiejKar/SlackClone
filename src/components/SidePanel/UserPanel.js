@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from "firebase/app";
+import { connect } from "react-redux"
 import { Dropdown, Grid, Header, Icon } from "semantic-ui-react"
 
 const dropDownOptions = () => [
@@ -20,7 +21,8 @@ const handleLogout = () => {
     })
 }
 
-const UserPanel = () => {
+const UserPanel = ({ currentUser }) => {
+
     return (
         <Grid>
             <Grid.Column>
@@ -32,7 +34,7 @@ const UserPanel = () => {
                 </Grid.Row>
                 <Header style={{ padding: "0.2em" }} as='h4' inverted>
                     <Dropdown trigger={
-                        <span>User</span>
+                        <span>{currentUser}</span>
                     } options={dropDownOptions()} />
                 </Header>
             </Grid.Column>
@@ -40,4 +42,7 @@ const UserPanel = () => {
     )
 }
 
-export default UserPanel;
+const mapStateFromProps = (state) => ({
+    currentUser: state.user.currentUser.displayName
+})
+export default connect(mapStateFromProps)(UserPanel);

@@ -26,7 +26,7 @@ const Root = ({ isLoading, setUser, clearUser }) => {
         clearUser()
       }
     })
-  }, [history, setUser])
+  }, [history, setUser, clearUser])
 
   const renderApp =
     <Switch>

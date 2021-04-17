@@ -14,20 +14,28 @@ const Channels = ({ currentUser, setChannel }) => {
     const [channels, setChannels] = useState([]);
     const [modal, setModal] = useState(false);
     const [form, setForm] = useState(initialForm);
-    const channelsRef = firebase.database().ref("channels")
-
+    const channelsRef = firebase.database().ref("channels");
+    const [isActive, setIsActive] = useState("");
     useEffect(() => {
         let loadChannels = []
         channelsRef.on("child_added", snap => {
             loadChannels.push(snap.val())
-            setChannels(loadChannels)
+            setChannels([...loadChannels], loadChannels);
+            setChannel(loadChannels[0])
+            setActiveChannel(loadChannels[0])
         })
     }, [])
 
+
+
     const changeChannel = channel => {
+        setActiveChannel(channel);
         setChannel(channel)
     }
 
+    const setActiveChannel = (channel) => {
+        setIsActive(channel.id)
+    }
     const displayChannels = (channels) => (
         channels.length > 0 && channels.map(channel => {
             return (
@@ -36,6 +44,7 @@ const Channels = ({ currentUser, setChannel }) => {
                     onClick={() => changeChannel(channel)}
                     name={channel.name}
                     style={{ opacity: 0.7 }}
+                    active={channel.id === isActive}
                 >
                     # {channel.name}
                 </Menu.Item>

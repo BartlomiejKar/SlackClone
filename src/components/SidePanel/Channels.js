@@ -24,6 +24,9 @@ const Channels = ({ currentUser, setChannel }) => {
             setChannel(loadChannels[0])
             setActiveChannel(loadChannels[0])
         })
+        return () => {
+            channelsRef.off()
+        }
     }, [])
 
 

@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from "react-redux"
 import { Menu } from "semantic-ui-react";
 import UserPanel from "./UserPanel";
 import Channels from "./Channels"
-const SidePanel = () => {
+const SidePanel = ({ currentUser }) => {
+    // console.log(currentUser.uid)
     return (
         <Menu
             size="large"
@@ -17,4 +19,8 @@ const SidePanel = () => {
     )
 }
 
-export default SidePanel
+const mapStateFromProps = (state) => ({
+    currentUser: state.user.currentUser
+})
+
+export default connect(mapStateFromProps)(SidePanel)

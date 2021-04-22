@@ -1,9 +1,14 @@
 import React from 'react';
+import firebase from "firebase/app"
 import { Segment, Comment } from "semantic-ui-react";
 import MessageHeader from "./MessageHeader";
 import MessageForm from "./MessageForm"
+import { connect } from 'react-redux';
 
-const Message = () => {
+
+
+const Message = ({ currentChannel, currentUser }) => {
+    const messageRef = firebase.database().ref("messages")
     return (
         <>
             <MessageHeader />
@@ -12,9 +17,18 @@ const Message = () => {
 
                 </Comment.Group>
             </Segment>
-            <MessageForm />
+            <MessageForm
+                key={currentChannel && currentChannel.id}
+                messagesRef={messageRef}
+                currentChannel={currentChannel}
+                currentUser={currentUser}
+            />
         </>
     )
 }
 
-export default Message
+const mapStateFromProps = (state) => ({
+    currentChannel: state.channel.currentChannel,
+    currentUser: state.user.currentUser
+})
+export default connect(mapStateFromProps)(Message)

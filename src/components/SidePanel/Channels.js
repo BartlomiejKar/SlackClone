@@ -20,14 +20,14 @@ const Channels = ({ currentUser, setChannel }) => {
         let loadChannels = []
         channelsRef.on("child_added", snap => {
             loadChannels.push(snap.val())
-            setChannels([...loadChannels], loadChannels);
+            setChannels(loadChannels);
             setChannel(loadChannels[0])
             setActiveChannel(loadChannels[0])
         })
         return () => {
             channelsRef.off()
         }
-    }, [])
+    }, [setChannel])
 
 
 

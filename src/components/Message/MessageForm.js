@@ -10,7 +10,7 @@ const MessageForm = ({ messagesRef, currentChannel, currentUser }) => {
     const [error, setError] = useState("")
     // console.log(currentChannel)
     // console.log(currentUser.displayName)
-    console.log(messages)
+    // console.log(messages)
 
     const onHandleChange = (e) => {
         setMessages([e.target.name] = e.target.value)

@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import firebase from "firebase/app"
 import { Segment, Button, Input } from "semantic-ui-react"
+import ModalFile from "./Modal"
+
+
 
 
 
 const MessageForm = ({ messagesRef, currentChannel, currentUser }) => {
     const [messages, setMessages] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
+    const [modal, setModal] = useState(false)
     // console.log(currentChannel)
     // console.log(currentUser.displayName)
     // console.log(messages)
 
+    const openModal = () => {
+        setModal(true)
+    }
+    const closeModal = () => {
+        setModal(false)
+    }
     const onHandleChange = (e) => {
         setMessages([e.target.name] = e.target.value)
     }
@@ -70,10 +80,15 @@ const MessageForm = ({ messagesRef, currentChannel, currentUser }) => {
                     disabled={loading}
                 />
                 <Button
+                    onClick={openModal}
                     color="teal"
                     content="upload Media"
                     labelPosition="right"
                     icon="cloud upload"
+                />
+                <ModalFile
+                    modal={modal}
+                    closeModal={closeModal}
                 />
             </Button.Group>
         </Segment>

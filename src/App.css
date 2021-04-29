@@ -23,3 +23,7 @@ padding: 1em;
     border-left: 2px solid orange;
     padding-left:8px
 }
+
+.message__image{
+    padding: 1em;
+}

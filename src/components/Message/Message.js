@@ -11,8 +11,6 @@ import { connect } from 'react-redux';
 const Message = ({ currentChannel, currentUser }) => {
     const messageRef = firebase.database().ref("messages");
 
-
-    // const [loading, setLoading] = useState(true);
     const [messages, setMessages] = useState([])
     useEffect(() => {
         if (currentChannel) {
@@ -27,8 +25,6 @@ const Message = ({ currentChannel, currentUser }) => {
 
             return () => messageRef.child(currentChannel.id).off();
         }
-
-
     }, [currentChannel])
 
 

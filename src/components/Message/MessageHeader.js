@@ -13,6 +13,7 @@ const MessageHeader = (props) => {
             </Header>
             <Header floated="right">
                 <Input
+                    onChange={props.handleChange}
                     size="mini"
                     icon="search"
                     name="search"

@@ -13,6 +13,7 @@ const Message = ({ currentChannel, currentUser }) => {
 
     const [messages, setMessages] = useState([])
     const [usersCount, setUsersCount] = useState(null)
+    const [searchMessages, setSearchMessages] = useState("")
 
     useEffect(() => {
         if (currentChannel) {
@@ -37,24 +38,42 @@ const Message = ({ currentChannel, currentUser }) => {
             }
             return acc
         }, [])
-        const usersCount = `${users.length} user`;
+        const usersCount = users.length > 1 ? `${users.length} users` : `${users.length} user`;
         setUsersCount(usersCount)
     }
-    const displayMessages = messages => (
-        messages.length > 0 && messages.map(el => {
-            return <SingleMessage
-                key={el.time}
-                message={el}
-                user={currentUser}
-            />
-        })
-    )
 
+    const displayMessages = messages => {
+        const displayMessagesAfterSearch = searchMessages ? filterMessagesForUser() : messages
+        if (displayMessagesAfterSearch.length > 0) {
+            return displayMessagesAfterSearch.map(el => {
+                return <SingleMessage
+                    key={el.time}
+                    message={el}
+                    user={currentUser}
+                />
+            })
+        }
+    }
+
+    const searchMessagesFormUsers = (e) => {
+        setSearchMessages(e.target.value)
+    }
+    const filterMessagesForUser = () => {
+        const regex = new RegExp(searchMessages, "gi")
+        const filterMessage = messages.reduce((acc, message) => {
+            if ((message.content && message.content.match(regex)) || message.user.name.match(regex)) {
+                acc.push(message)
+            }
+            return acc
+        }, [])
+        return filterMessage
+    }
     return (
         <>
             <MessageHeader
                 users={usersCount}
                 channel={currentChannel}
+                handleChange={searchMessagesFormUsers}
             />
             <Segment>
                 <Comment.Group className="messages">

@@ -24,6 +24,7 @@ const PrivateMessages = (props) => {
         return () => usersRef.off()
     }, [])
 
+
     const displayUsers = () => {
         if (users.length > 0) {
             return users.filter((user) => user.id !== props.currentUser.uid).map((user) => {
@@ -31,13 +32,27 @@ const PrivateMessages = (props) => {
                     < Menu.Item
                         key={user.id}
                         name={user.name}
-                        onClick={() => props.setChannel(user)}
+                        onClick={() => selectUser(user)}
+                        active={props.currentChannel && generateMessagesInPrivateChannels(user.id) === props.currentChannel.id}
                     >
                         {"@ " + user.name}
                     </Menu.Item >
 
                 )
             })
+        }
+    }
+    const selectUser = (user) => {
+        let userData = { ...user }
+        userData.id = generateMessagesInPrivateChannels(user.id)
+        props.setChannel(user)
+    }
+
+    const generateMessagesInPrivateChannels = (userID) => {
+        if (props.currentUser.uid < userID) {
+            return props.currentUser.uid + userID
+        } else {
+            return userID + props.currentUser.uid
         }
     }
     return (

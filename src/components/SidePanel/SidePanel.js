@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { Menu } from "semantic-ui-react";
 import UserPanel from "./UserPanel";
 import Channels from "./Channels"
+import PrivateMessages from '../../PrivateMessages/PrivateMessages';
 const SidePanel = ({ currentUser }) => {
     // console.log(currentUser.uid)
     return (
@@ -15,6 +16,7 @@ const SidePanel = ({ currentUser }) => {
         >
             <UserPanel />
             <Channels />
+            <PrivateMessages />
         </Menu>
     )
 }

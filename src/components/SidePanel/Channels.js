@@ -5,6 +5,7 @@ import { setChannel } from "../../actions/index"
 import { Menu, Icon, Modal, Form, Input, Button } from 'semantic-ui-react';
 
 
+
 const initialForm = {
     nameChannel: "",
     detailsChannel: "",
@@ -110,7 +111,7 @@ const Channels = ({ currentUser, setChannel }) => {
     }
     return (
         <>
-            <Menu.Menu style={{ paddingBottom: "2em" }}>
+            <Menu.Menu className="menu">
                 <Menu.Item>
                     <span>
                         <Icon name="exchange" />

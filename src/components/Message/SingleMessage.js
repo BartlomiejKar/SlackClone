@@ -4,7 +4,7 @@ import { Comment, Image } from "semantic-ui-react"
 
 const SingleMessage = ({ message, user }) => {
     const time = message.time
-    console.log(message.image)
+    // console.log(message.image)
     const isOwnMessage = (user, message) => {
         return user.uid === message.user.id ? "message_self" : "";
     }

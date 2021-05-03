@@ -12,6 +12,8 @@ const Message = ({ currentChannel, currentUser }) => {
     const messageRef = firebase.database().ref("messages");
 
     const [messages, setMessages] = useState([])
+    const [usersCount, setUsersCount] = useState(null)
+
     useEffect(() => {
         if (currentChannel) {
             setMessages([])
@@ -19,6 +21,7 @@ const Message = ({ currentChannel, currentUser }) => {
                 setMessages((currentState) => {
                     let updateMessages = [...currentState];
                     updateMessages.push(snap.val())
+                    countUsers(updateMessages)
                     return updateMessages
                 })
             })
@@ -27,7 +30,16 @@ const Message = ({ currentChannel, currentUser }) => {
         }
     }, [currentChannel])
 
-
+    const countUsers = (messages) => {
+        const users = messages.reduce((acc, message) => {
+            if (!acc.includes(message.user.name)) {
+                acc.push(message.user.name)
+            }
+            return acc
+        }, [])
+        const usersCount = `${users.length} user`;
+        setUsersCount(usersCount)
+    }
     const displayMessages = messages => (
         messages.length > 0 && messages.map(el => {
             return <SingleMessage
@@ -40,7 +52,10 @@ const Message = ({ currentChannel, currentUser }) => {
 
     return (
         <>
-            <MessageHeader />
+            <MessageHeader
+                users={usersCount}
+                channel={currentChannel}
+            />
             <Segment>
                 <Comment.Group className="messages">
                     {displayMessages(messages)}

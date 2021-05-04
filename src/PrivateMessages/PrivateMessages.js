@@ -8,7 +8,13 @@ import { Menu, Icon } from "semantic-ui-react"
 
 const PrivateMessages = (props) => {
     const [users, setUsers] = useState([])
+
+    const [statusUser, setStatusUser] = useState([]);
+
     const usersRef = firebase.database().ref("users");
+
+    const connectedUserRef = firebase.database().ref(".info/connected");
+    const statusUserRef = firebase.database().ref("status")
 
     useEffect(() => {
         usersRef.on("child_added", snap => {
@@ -21,8 +27,37 @@ const PrivateMessages = (props) => {
             })
         })
 
-        return () => usersRef.off()
-    }, [])
+        connectedUserRef.on("value", (snap) => {
+            if (props.currentUser && snap.val()) {
+                const userStatus = statusUserRef.child(props.currentUser.uid)
+                userStatus.set(true)
+                userStatus.onDisconnect().remove()
+            }
+        })
+
+        return () => { usersRef.off(); connectedUserRef.off() }
+    }, [props.currentUser])
+
+    useEffect(() => {
+        statusUserRef.on("child_added", snap => {
+            setStatusUser((currentState) => {
+                let updatedStatus = [...currentState]
+                updatedStatus.push(snap.key)
+                return updatedStatus
+            })
+        })
+
+        statusUserRef.on("child_removed", snap => {
+            setStatusUser(currentState => {
+                let updatedStatus = [...currentState]
+                const index = updatedStatus.indexOf(snap.key)
+                updatedStatus.splice(index, 1)
+                return updatedStatus
+            })
+        })
+
+        return () => statusUserRef.off()
+    }, [users])
 
 
     const displayUsers = () => {
@@ -36,6 +71,7 @@ const PrivateMessages = (props) => {
                         active={props.currentChannel && generateMessagesInPrivateChannels(user.id) === props.currentChannel.id}
                     >
                         {"@ " + user.name}
+                        <Icon name="circle" color={`${statusUser.indexOf(user.id) !== -1 ? "green" : "red"}`} />
                     </Menu.Item >
 
                 )

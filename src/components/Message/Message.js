@@ -8,12 +8,41 @@ import { connect } from 'react-redux';
 
 
 
+
 const Message = ({ currentChannel, currentUser }) => {
     const messageRef = firebase.database().ref("messages");
+    const usersRef = firebase.database().ref("users")
 
     const [messages, setMessages] = useState([])
+
     const [usersCount, setUsersCount] = useState(null)
     const [searchMessages, setSearchMessages] = useState("")
+    const [isStarredChannel, setIsStarredChannel] = useState(false)
+
+    const addFavoriteChannel = () => {
+
+        setIsStarredChannel(prevState => !prevState)
+        if (!isStarredChannel) {
+            usersRef.child(`${currentUser.uid}/starred`)
+                .update({
+                    [currentChannel.id]: {
+                        name: currentChannel.name,
+                        details: currentChannel.details,
+                        createdBy: {
+                            name: currentChannel.createdBy.name
+                        }
+                    }
+                })
+        } else {
+            usersRef.child(`${currentUser.uid}/starred`)
+                .child(currentChannel.id)
+                .remove(err => {
+                    if (err !== null) {
+                        console.log(err)
+                    }
+                })
+        }
+    }
 
     useEffect(() => {
         if (currentChannel) {
@@ -26,11 +55,24 @@ const Message = ({ currentChannel, currentUser }) => {
                     return updateMessages
                 })
             })
-
+            addStarToChannel(currentChannel.id, currentUser.uid)
             return () => messageRef.child(currentChannel.id).off();
         }
     }, [currentChannel])
 
+
+    const addStarToChannel = (channellID, userID) => {
+        usersRef.child(userID)
+            .child("starred")
+            .once("value")
+            .then(data => {
+                if (data.val() !== null) {
+                    const channel = Object.keys(data.val());
+                    const prevStarred = channel.includes(channellID)
+                    setIsStarredChannel(prevStarred)
+                }
+            })
+    }
     const countUsers = (messages) => {
         const users = messages.reduce((acc, message) => {
             if (!acc.includes(message.user.name)) {
@@ -74,6 +116,8 @@ const Message = ({ currentChannel, currentUser }) => {
                 users={usersCount}
                 channel={currentChannel}
                 handleChange={searchMessagesFormUsers}
+                addFavoriteChannel={addFavoriteChannel}
+                isStarredChannel={isStarredChannel}
             />
             <Segment>
                 <Comment.Group className="messages">

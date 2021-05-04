@@ -7,7 +7,10 @@ const MessageHeader = (props) => {
             <Header fluid="true" as="h2" floated="left" style={{ marginBottom: 0 }}>
                 <span>
                     {channel}
-                    <Icon name={"star outline"} color="black" />
+                    <Icon
+                        name={`${props.isStarredChannel ? "star" : "star outline"}`}
+                        color={`${props.isStarredChannel ? "yellow" : "black"}`}
+                        onClick={props.addFavoriteChannel} />
                 </span>
                 <Header.Subheader>{props.users}</Header.Subheader>
             </Header>

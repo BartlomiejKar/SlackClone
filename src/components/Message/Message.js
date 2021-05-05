@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import firebase from "firebase/app";
+import { connect } from 'react-redux';
 import { Segment, Comment } from "semantic-ui-react";
 import MessageHeader from "./MessageHeader";
 import MessageForm from "./MessageForm"
-import SingleMessage from "./SingleMessage"
-import { connect } from 'react-redux';
+import SingleMessage from "./SingleMessage";
+import { setUserPosts } from "../../actions/index"
 
 
 
 
-const Message = ({ currentChannel, currentUser }) => {
+
+const Message = ({ currentChannel, currentUser, setUserPosts }) => {
     const messageRef = firebase.database().ref("messages");
     const usersRef = firebase.database().ref("users")
 
@@ -18,6 +20,27 @@ const Message = ({ currentChannel, currentUser }) => {
     const [usersCount, setUsersCount] = useState(null)
     const [searchMessages, setSearchMessages] = useState("")
     const [isStarredChannel, setIsStarredChannel] = useState(false)
+
+
+    useEffect(() => {
+        if (currentChannel) {
+            setMessages([])
+            messageRef.child(currentChannel.id).on("child_added", snap => {
+                setMessages((currentState) => {
+                    let updateMessages = [...currentState];
+                    updateMessages.push(snap.val())
+                    countUsers(updateMessages)
+                    countPosterByUser(updateMessages)
+                    return updateMessages
+                })
+            })
+
+
+            addStarToChannel(currentChannel.id, currentUser.uid)
+            return () => messageRef.child(currentChannel.id).off();
+        }
+    }, [currentChannel])
+
 
     const addFavoriteChannel = () => {
 
@@ -43,23 +66,6 @@ const Message = ({ currentChannel, currentUser }) => {
                 })
         }
     }
-
-    useEffect(() => {
-        if (currentChannel) {
-            setMessages([])
-            messageRef.child(currentChannel.id).on("child_added", snap => {
-                setMessages((currentState) => {
-                    let updateMessages = [...currentState];
-                    updateMessages.push(snap.val())
-                    countUsers(updateMessages)
-                    return updateMessages
-                })
-            })
-            addStarToChannel(currentChannel.id, currentUser.uid)
-            return () => messageRef.child(currentChannel.id).off();
-        }
-    }, [currentChannel])
-
 
     const addStarToChannel = (channellID, userID) => {
         usersRef.child(userID)
@@ -94,6 +100,22 @@ const Message = ({ currentChannel, currentUser }) => {
                     user={currentUser}
                 />
             })
+        }
+    }
+
+    const countPosterByUser = (messages) => {
+        if (messages) {
+            let usersPosts = messages.reduce((acc, message) => {
+                if (message.user.name in acc) {
+                    acc[message.user.name].count += 1;
+                } else {
+                    acc[message.user.name] = {
+                        count: 1
+                    }
+                }
+                return acc
+            }, {})
+            setUserPosts(usersPosts)
         }
     }
 
@@ -140,4 +162,4 @@ const mapStateFromProps = (state) => {
         currentUser: state.user.currentUser
     }
 }
-export default connect(mapStateFromProps)(Message)
+export default connect(mapStateFromProps, { setUserPosts })(Message)

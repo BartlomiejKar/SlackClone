@@ -10,6 +10,10 @@ const initialUserState = {
 const initialChannel = {
     currentChannel: null
 }
+
+// const initialPrivateChannel = {
+//     private: true
+// }
 const userReducer = (state = initialUserState, action) => {
     switch (action.type) {
         case actionTypes.SET_USER:
@@ -47,7 +51,19 @@ const channelReducer = (state = initialChannel, action) => {
 }
 
 
+// const privateChannel = (state = initialPrivateChannel, action) => {
+//     switch (action.type) {
+//         case actionTypes.PRIVATE:
+//             return ({
+//                 private: action.payload.private
+//             })
+//         default:
+//             return state
+//     }
+// }
+
 export const rootReducers = combineReducers({
     user: userReducer,
-    channel: channelReducer
+    channel: channelReducer,
+    // private: privateChannel
 })

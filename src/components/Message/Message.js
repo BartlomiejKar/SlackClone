@@ -5,7 +5,7 @@ import { Segment, Comment } from "semantic-ui-react";
 import MessageHeader from "./MessageHeader";
 import MessageForm from "./MessageForm"
 import SingleMessage from "./SingleMessage";
-import { setUserPosts } from "../../actions/index"
+// import { setUserPosts } from "../../actions/index"
 
 
 
@@ -16,7 +16,7 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
     const usersRef = firebase.database().ref("users")
 
     const [messages, setMessages] = useState([])
-
+    // console.log(messages)
     const [usersCount, setUsersCount] = useState(null)
     const [searchMessages, setSearchMessages] = useState("")
     const [isStarredChannel, setIsStarredChannel] = useState(false)
@@ -30,17 +30,14 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
                     let updateMessages = [...currentState];
                     updateMessages.push(snap.val())
                     countUsers(updateMessages)
-                    countPosterByUser(updateMessages)
+                    // countPosterByUser(updateMessages)
                     return updateMessages
                 })
             })
-
-
             addStarToChannel(currentChannel.id, currentUser.uid)
             return () => messageRef.child(currentChannel.id).off();
         }
     }, [currentChannel])
-
 
     const addFavoriteChannel = () => {
 
@@ -103,21 +100,21 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
         }
     }
 
-    const countPosterByUser = (messages) => {
-        if (messages) {
-            let usersPosts = messages.reduce((acc, message) => {
-                if (message.user.name in acc) {
-                    acc[message.user.name].count += 1;
-                } else {
-                    acc[message.user.name] = {
-                        count: 1
-                    }
-                }
-                return acc
-            }, {})
-            setUserPosts(usersPosts)
-        }
-    }
+    // const countPosterByUser = (messages) => {
+    //     if (messages) {
+    //         let usersPosts = messages.reduce((acc, message) => {
+    //             if (message.user.name in acc) {
+    //                 acc[message.user.name].count += 1;
+    //             } else {
+    //                 acc[message.user.name] = {
+    //                     count: 1
+    //                 }
+    //             }
+    //             return acc
+    //         }, {})
+    //         setUserPosts(usersPosts)
+    //     }
+    // }
 
     const searchMessagesFormUsers = (e) => {
         setSearchMessages(e.target.value)
@@ -159,7 +156,8 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
 const mapStateFromProps = (state) => {
     return {
         currentChannel: state.channel.currentChannel,
-        currentUser: state.user.currentUser
+        currentUser: state.user.currentUser,
     }
 }
-export default connect(mapStateFromProps, { setUserPosts })(Message)
+// export default connect(mapStateFromProps, { setUserPosts })(Message)
+export default connect(mapStateFromProps,)(Message)

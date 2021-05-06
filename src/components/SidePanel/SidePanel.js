@@ -20,7 +20,8 @@ const SidePanel = ({ currentUser }) => {
                 users={currentUser}
             />
             <Channels />
-            <PrivateMessages />
+            <PrivateMessages
+            />
         </Menu>
     )
 }

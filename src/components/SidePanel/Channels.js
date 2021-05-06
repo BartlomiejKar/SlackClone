@@ -119,6 +119,7 @@ const Channels = ({ currentUser, setChannel }) => {
         const key = channelsRef.push().key;
         const newChannel = {
             id: key,
+            isPrivate: false,
             name: nameChannel,
             details: detailsChannel,
             createdBy: {

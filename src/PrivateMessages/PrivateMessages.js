@@ -22,6 +22,7 @@ const PrivateMessages = (props) => {
                 let updatedState = [...currentState]
                 let user = snap.val()
                 user.id = snap.key
+                user.isPrivate = true
                 updatedState.push(user)
                 return updatedState
             })
@@ -34,7 +35,6 @@ const PrivateMessages = (props) => {
                 userStatus.onDisconnect().remove()
             }
         })
-
         return () => { usersRef.off(); connectedUserRef.off() }
     }, [props.currentUser])
 
@@ -106,7 +106,7 @@ const PrivateMessages = (props) => {
 
 const mapStateFromProps = (state) => ({
     currentUser: state.user.currentUser,
-    currentChannel: state.channel
+    currentChannel: state.channel,
 })
 
 export default connect(mapStateFromProps, { setChannel })(PrivateMessages);

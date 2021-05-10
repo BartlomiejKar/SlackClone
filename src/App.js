@@ -1,7 +1,7 @@
 import './App.css';
 import { connect } from "react-redux"
 import { Grid } from "semantic-ui-react";
-import NavPanel from "./components/NavPanel/NavPanel";
+// import NavPanel from "./components/NavPanel/NavPanel";
 import SidePanel from "./components/SidePanel/SidePanel";
 import Message from "./components/Message/Message";
 import MetaPanel from "./components/MetaPanel/MetaPanel"
@@ -9,7 +9,7 @@ import MetaPanel from "./components/MetaPanel/MetaPanel"
 const App = (props) => {
   return (
     <Grid columns="equal" className="app" style={{ backgroundColor: "#eee" }}>
-      <NavPanel />
+      {/* <NavPanel /> */}
       <SidePanel />
       <Grid.Column style={{ marginLeft: 320 }}>
         <Message />

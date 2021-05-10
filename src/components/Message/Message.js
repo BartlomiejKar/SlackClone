@@ -40,7 +40,6 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
     }, [currentChannel])
 
     const addFavoriteChannel = () => {
-
         setIsStarredChannel(prevState => !prevState)
         if (!isStarredChannel) {
             usersRef.child(`${currentUser.uid}/starred`)
@@ -48,6 +47,7 @@ const Message = ({ currentChannel, currentUser, setUserPosts }) => {
                     [currentChannel.id]: {
                         name: currentChannel.name,
                         details: currentChannel.details,
+                        isPrivate: currentChannel.isPrivate,
                         createdBy: {
                             name: currentChannel.createdBy.name
                         }

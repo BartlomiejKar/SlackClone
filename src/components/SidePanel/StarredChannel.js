@@ -48,15 +48,12 @@ const StarredChannel = (props) => {
         return () => usersRef.off()
     }, [])
 
-    const changeChannel = channel => {
-        setChannel(channel);
-    }
+
     const displayChannels = (starredChannel) => (
         starredChannel.length > 0 && starredChannel.map(channel => {
             return (
                 <Menu.Item
                     key={channel.id}
-                    onClick={() => changeChannel(channel)}
                     name={channel.name}
                     style={{ opacity: 0.7 }}
                 >

@@ -32,9 +32,8 @@ const Login = () => {
             setLoading(true)
             firebase.auth()
                 .signInWithEmailAndPassword(dataUser.email, dataUser.password)
-                .then(loginUser => {
+                .then(() => {
                     setLoading(false)
-                    console.log(loginUser)
                 }).catch(err => {
                     console.log(err)
                     setErrors(err.message)

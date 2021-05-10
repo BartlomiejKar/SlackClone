@@ -15,12 +15,11 @@ const dropDownOptions = () => [
     }
 ]
 
-const handleLogout = () => {
-    firebase.auth().signOut().then(() => {
-        console.log("signout")
-    })
-}
 
+
+const handleLogout = () => {
+    firebase.auth().signOut()
+}
 const UserPanel = ({ currentUser }) => {
 
     return (

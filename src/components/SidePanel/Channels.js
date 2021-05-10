@@ -133,7 +133,6 @@ const Channels = ({ currentUser, setChannel }) => {
             .then(() => {
                 setForm(initialForm);
                 closeModal();
-                console.log("channel added")
             })
     }
 
@@ -151,18 +150,16 @@ const Channels = ({ currentUser, setChannel }) => {
     }
 
     const validForm = ({ nameChannel, detailsChannel }) => {
-        console.log(nameChannel)
         if (nameChannel && detailsChannel) {
             return true
         } else {
-            console.log("please fill fields")
+            return
         }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validForm(form)) {
-            console.log("add channels")
             addChannel(form)
         } else {
 

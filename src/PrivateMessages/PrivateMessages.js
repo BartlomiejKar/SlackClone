@@ -68,7 +68,7 @@ const PrivateMessages = (props) => {
                         key={user.id}
                         name={user.name}
                         onClick={() => selectUser(user, user.isPrivate)}
-                        active={props.currentChannel && generateMessagesInPrivateChannels(user.id) === props.currentChannel.id}
+                        active={props.currentChannel && generateMessagesInPrivateChannels(user.id) === props.currentChannel.currentChannel.id}
                     >
                         {"@ " + user.name}
                         <Icon name="circle" color={`${statusUser.indexOf(user.id) !== -1 ? "green" : "red"}`} />
@@ -81,7 +81,7 @@ const PrivateMessages = (props) => {
     const selectUser = (user, isprivate) => {
         let userData = { ...user }
         userData.id = generateMessagesInPrivateChannels(user.id)
-        props.setChannel(user, isprivate)
+        props.setChannel(userData, isprivate)
     }
 
     const generateMessagesInPrivateChannels = (userID) => {
@@ -91,6 +91,7 @@ const PrivateMessages = (props) => {
             return userID + props.currentUser.uid
         }
     }
+
     return (
         <Menu.Menu className="menu">
             <Menu.Item>

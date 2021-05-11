@@ -24,7 +24,7 @@ const Channels = ({ currentUser, setChannel }) => {
         channelsRef.on("child_added", snap => {
             loadChannels.push(snap.val())
             setChannels(loadChannels);
-            setChannel(loadChannels[0]);
+            // setChannel(loadChannels[0]);
             setActiveChannel(loadChannels[0]);
             setChannelNotification(loadChannels[0])
             addNotificationForChannel(snap.key)

@@ -67,7 +67,7 @@ const PrivateMessages = (props) => {
                     < Menu.Item
                         key={user.id}
                         name={user.name}
-                        onClick={() => selectUser(user, user.isPrivate)}
+                        onClick={() => selectUser(user)}
                         active={props.currentChannel && generateMessagesInPrivateChannels(user.id) === props.currentChannel.currentChannel.id}
                     >
                         {"@ " + user.name}
@@ -78,10 +78,10 @@ const PrivateMessages = (props) => {
             })
         }
     }
-    const selectUser = (user, isprivate) => {
+    const selectUser = (user) => {
         let userData = { ...user }
         userData.id = generateMessagesInPrivateChannels(user.id)
-        props.setChannel(userData, isprivate)
+        props.setChannel(userData)
     }
 
     const generateMessagesInPrivateChannels = (userID) => {

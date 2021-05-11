@@ -5,8 +5,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # shooping-cart
 
 
-<img src="https://github.com/BartlomiejKar/SlackClone/blob/master/imgReadme/login%20slack.jpg" width="130" height="400" />
-<img src="https://github.com/BartlomiejKar/SlackClone/blob/master/imgReadme/slack.jpg" width="200" height="400" />
+<img src="https://github.com/BartlomiejKar/SlackClone/blob/master/imgReadme/login%20slack.jpg" width="400" height="300" />
+<img src="https://github.com/BartlomiejKar/SlackClone/blob/master/imgReadme/slack.jpg" width="600" height="300" />
 
 
 Technologies I used:
